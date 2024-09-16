@@ -1,8 +1,8 @@
-use crate::blocks::{Text, TextBlock};
+use crate::blocks::{TextBlock, SectionBlock};
 
 pub(crate) enum Blocks<'a> {
     TextBlock(TextBlock<'a>),
-    SectionBlock(Text<'a>),
+    SectionBlock(SectionBlock<'a>),
 }
 
 
