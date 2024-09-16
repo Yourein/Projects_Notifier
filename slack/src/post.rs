@@ -21,6 +21,9 @@ impl<'a> Post<'_> {
                     Blocks::TextBlock(textblock) => {
                         serde_json::to_string(textblock).ok()
                     },
+                    Blocks::SectionBlock(sectionblock) => {
+                        serde_json::to_string(sectionblock).ok()
+                    }
                 }
             })
             .collect::<Vec<String>>()
