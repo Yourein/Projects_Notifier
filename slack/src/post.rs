@@ -1,12 +1,12 @@
 use crate::{blocks::TextBlock, traits::*};
 
-pub struct Post {
-    blocks: Vec<Box<dyn Block>>,
+pub struct Post<'a> {
+    blocks: Vec<Blocks<'a>>,
     sections: Vec<Box<dyn Section>>
 }
 
-impl Post {
-    pub fn new() -> Post {
+impl<'a> Post<'_> {
+    pub fn new() -> Post<'a> {
         Post {
             blocks: vec!(),
             sections: vec!()
@@ -19,6 +19,10 @@ impl Post {
 
     pub fn add_text_block(&mut self, text: &str) {
         let str = text.to_string();
-        self.blocks.push(TextBlock::new(str));
+        self.blocks.push(
+            Blocks::TextBlock(
+                TextBlock::new(str)
+            )
+        );
     }
 }
