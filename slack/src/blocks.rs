@@ -77,3 +77,47 @@ impl<'a> SectionBlock<'_> {
         )
     }
 }
+
+#[derive(Serialize, Debug)]
+pub(crate) struct Attachments<'a> {
+    color: String,
+    blocks: Blocks<'a>,
+}
+
+impl<'a> Attachments<'a> {
+    pub fn new(color: Option<String>) -> Self {
+        Self {
+            color: color.unwrap_or_else(|| "#f2c744".to_string()),
+            blocks: Blocks(vec!()),
+        }
+    }
+
+    pub fn add_block(&mut self, block: Block<'a>) {
+        self.blocks.0.push(block);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{blocks::{Attachments, SectionBlock, TextBlock}, traits::Block};
+
+    #[test]
+    fn Serialize_Attachments() {
+        let mut attachments = Attachments::new(None);
+        attachments.add_block(
+            Block::TextBlock(
+                TextBlock::new("hoge".to_string())
+            )
+        );
+
+        attachments.add_block(
+            Block::SectionBlock(
+                SectionBlock::new()
+            )
+        );
+
+        let res = serde_json::to_string(&attachments).unwrap();
+        eprintln!{"{}", res};
+        assert!(true)
+    }
+}
