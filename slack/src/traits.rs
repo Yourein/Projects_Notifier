@@ -1,6 +1,7 @@
 use crate::blocks::{TextBlock, SectionBlock};
 
-pub(crate) enum Blocks<'a> {
+#[derive(Debug)]
+pub(crate) enum Block<'a> {
     TextBlock(TextBlock<'a>),
     SectionBlock(SectionBlock<'a>),
 }

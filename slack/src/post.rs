@@ -1,7 +1,7 @@
 use crate::{blocks::TextBlock, traits::*};
 
 pub struct Post<'a> {
-    blocks: Vec<Blocks<'a>>,
+    blocks: Vec<Block<'a>>,
     sections: Vec<Box<dyn Section>>
 }
 
@@ -18,10 +18,10 @@ impl<'a> Post<'_> {
             .iter()
             .filter_map(|x| {
                 match x {
-                    Blocks::TextBlock(textblock) => {
+                    Block::TextBlock(textblock) => {
                         serde_json::to_string(textblock).ok()
                     },
-                    Blocks::SectionBlock(sectionblock) => {
+                    Block::SectionBlock(sectionblock) => {
                         serde_json::to_string(sectionblock).ok()
                     }
                 }
@@ -37,7 +37,7 @@ impl<'a> Post<'_> {
     pub fn add_text_block(&mut self, text: &str) {
         let str = text.to_string();
         self.blocks.push(
-            Blocks::TextBlock(
+            Block::TextBlock(
                 TextBlock::new(str)
             )
         );
