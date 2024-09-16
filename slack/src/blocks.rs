@@ -102,7 +102,7 @@ mod tests {
     use crate::{blocks::{Attachments, SectionBlock, TextBlock}, traits::Block};
 
     #[test]
-    fn Serialize_Attachments() {
+    fn serialize_attachments() {
         let mut attachments = Attachments::new(None);
         attachments.add_block(
             Block::TextBlock(
