@@ -14,6 +14,7 @@ impl<'a> Post<'_> {
     }
 
     pub fn to_json(&mut self) -> String {
+        // TODO: replace this serialize operation with #[derive(Serialize)]
         let blocks_json: String = self.blocks
             .iter()
             .filter_map(|x| {

@@ -1,5 +1,29 @@
 use serde::Serialize;
-use crate::traits::Blocks;
+use serde::ser::{SerializeSeq, Serializer};
+use crate::traits::Block;
+
+#[derive(Debug)]
+pub(crate) struct Blocks<'a>(pub Vec<Block<'a>>);
+
+impl<'a> Serialize for Blocks<'_> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut seq = serializer.serialize_seq(Some(self.0.len()))?;
+        for e in &self.0 {
+            match e {
+                Block::SectionBlock(e) => {
+                    seq.serialize_element(e)?;
+                }
+                Block::TextBlock(e) => {
+                    seq.serialize_element(e)?;
+                }
+            }
+        }
+        seq.end()
+    }
+}
 
 #[derive(Serialize, Debug)]
 struct Text<'a> {
