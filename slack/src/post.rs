@@ -1,11 +1,11 @@
-use crate::{blocks::{Attachments, TextBlock}, traits::*};
+use crate::{blocks::{Attachments, SectionBlock, TextBlock}, traits::*};
 
 pub struct Post<'a> {
     blocks: Vec<Block<'a>>,
     attachments: Vec<Attachments<'a>>
 }
 
-impl<'a> Post<'_> {
+impl<'a> Post<'a> {
     pub fn new() -> Post<'a> {
         Post {
             blocks: vec!(),
@@ -42,6 +42,18 @@ impl<'a> Post<'_> {
                 TextBlock::new(str)
             )
         );
+    }
+
+    pub fn add_section_block(&mut self, block: SectionBlock<'a>) {
+        self.blocks.push(
+            Block::SectionBlock(
+                block
+            )
+        );
+    }
+
+    pub fn add_attachment(&mut self, attachment: Attachments<'a>) {
+        self.attachments.push(attachment);
     }
 }
 
