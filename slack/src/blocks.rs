@@ -71,7 +71,7 @@ impl<'a> SectionBlock<'_> {
 
         self.fields.push(
             Text {
-                _type: "section",
+                _type: "mrkdwn",
                 text: text,
             }
         )
