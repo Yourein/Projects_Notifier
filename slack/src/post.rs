@@ -1,43 +1,23 @@
-use crate::{blocks::{Attachments, SectionBlock, TextBlock}, traits::*};
+use crate::{blocks::{Attachments, Blocks, SectionBlock, TextBlock}, traits::*};
+use serde::Serialize;
 
+#[derive(Serialize)]
 pub struct Post<'a> {
-    blocks: Vec<Block<'a>>,
+    blocks: Blocks<'a>,
     attachments: Vec<Attachments<'a>>
 }
 
 impl<'a> Post<'a> {
     pub fn new() -> Post<'a> {
         Post {
-            blocks: vec!(),
+            blocks: Blocks(vec!()),
             attachments: vec!()
         }
     }
 
-    pub fn to_json(&mut self) -> String {
-        // TODO: replace this serialize operation with #[derive(Serialize)]
-        let blocks_json: String = self.blocks
-            .iter()
-            .filter_map(|x| {
-                match x {
-                    Block::TextBlock(textblock) => {
-                        serde_json::to_string(textblock).ok()
-                    },
-                    Block::SectionBlock(sectionblock) => {
-                        serde_json::to_string(sectionblock).ok()
-                    }
-                }
-            })
-            .collect::<Vec<String>>()
-            .join(",");
-
-        //TODO: Section
-
-        format!{"{{blocks: [{}]}}", blocks_json}
-    }
-
     pub fn add_text_block(&mut self, text: &str) {
         let str = text.to_string();
-        self.blocks.push(
+        self.blocks.0.push(
             Block::TextBlock(
                 TextBlock::new(str)
             )
@@ -45,7 +25,7 @@ impl<'a> Post<'a> {
     }
 
     pub fn add_section_block(&mut self, block: SectionBlock<'a>) {
-        self.blocks.push(
+        self.blocks.0.push(
             Block::SectionBlock(
                 block
             )
@@ -66,8 +46,8 @@ mod tests {
         let mut post = Post::new();
         post.add_text_block("hoge");
 
-        let json = post.to_json();
-        eprintln!{"{}", json}
-        assert_eq!(1, 1);
+        let serde_json = serde_json::to_string(&post).unwrap();
+        eprintln!{"{}", serde_json}
+        assert!(true)
     }
 }
