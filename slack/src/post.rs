@@ -39,12 +39,26 @@ impl<'a> Post<'a> {
 
 #[cfg(test)]
 mod tests {
+    use crate::blocks::{Attachments, SectionBlock, TextBlock};
+    use crate::traits::Block;
+
     use super::Post;
 
     #[test]
-    fn json() {
+    fn mock_json() {
         let mut post = Post::new();
         post.add_text_block("hoge");
+
+        let mut attachment = Attachments::new(None);
+        let mut section = SectionBlock::new();
+        section.add_paragraph("Test Title", "test body");
+        attachment.add_block(
+            Block::TextBlock(TextBlock::new("attachment text".to_string()))
+        );
+        attachment.add_block(
+            Block::SectionBlock(section)
+        );
+        post.add_attachment(attachment);
 
         let serde_json = serde_json::to_string(&post).unwrap();
         eprintln!{"{}", serde_json}
