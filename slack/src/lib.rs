@@ -1,4 +1,4 @@
 pub mod webhook;
 pub mod post;
-mod traits;
-mod blocks;
+pub mod traits;
+pub mod blocks;
