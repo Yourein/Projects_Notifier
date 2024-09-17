@@ -33,7 +33,7 @@ struct Text<'a> {
 }
 
 #[derive(Serialize, Debug)]
-pub(crate) struct TextBlock<'a> {
+pub struct TextBlock<'a> {
     #[serde(rename = "type")]
     _type: &'a str,
     text: Text<'a>,
@@ -52,7 +52,7 @@ impl<'a> TextBlock<'_> {
 }
 
 #[derive(Serialize, Debug)]
-pub(crate) struct SectionBlock<'a> {
+pub struct SectionBlock<'a> {
     #[serde(rename = "type")]
     _type: &'a str,
     fields: Vec<Text<'a>>
@@ -79,7 +79,7 @@ impl<'a> SectionBlock<'_> {
 }
 
 #[derive(Serialize, Debug)]
-pub(crate) struct Attachments<'a> {
+pub struct Attachments<'a> {
     color: String,
     blocks: Blocks<'a>,
 }
