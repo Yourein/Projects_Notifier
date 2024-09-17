@@ -5,6 +5,3 @@ pub(crate) enum Block<'a> {
     TextBlock(TextBlock<'a>),
     SectionBlock(SectionBlock<'a>),
 }
-
-
-pub trait Section {}

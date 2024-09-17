@@ -1,15 +1,15 @@
-use crate::{blocks::TextBlock, traits::*};
+use crate::{blocks::{Attachments, TextBlock}, traits::*};
 
 pub struct Post<'a> {
     blocks: Vec<Block<'a>>,
-    sections: Vec<Box<dyn Section>>
+    attachments: Vec<Attachments<'a>>
 }
 
 impl<'a> Post<'_> {
     pub fn new() -> Post<'a> {
         Post {
             blocks: vec!(),
-            sections: vec!()
+            attachments: vec!()
         }
     }
 
