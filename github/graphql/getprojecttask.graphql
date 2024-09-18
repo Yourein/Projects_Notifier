@@ -1,0 +1,74 @@
+# Get tasks on the board
+query(
+    $org_login: String!,
+    $project_serial: Int!,
+    $task_cursor_after: String,
+) {
+    viewer {
+        organization(
+            login: $org_login
+        ) {
+            projectV2(
+                number: $project_serial
+            ) {
+                items(
+                    first: 100,
+                    after: $task_cursor_after,
+                ) {
+                    pageInfo {
+                        hasNextPage,
+                        endCursor,
+                    },
+                    nodes {
+                        createdAt,
+                        fieldValues(
+                            first: 10,
+                        ) {
+                            nodes {
+                                ... on ProjectV2ItemFieldUserValue {
+                                    field {
+                                        ... on ProjectV2FieldCommon {
+                                            name,
+                                        }
+                                    },
+                                    users(
+                                        first: 10,
+                                    ) {
+                                        nodes {
+                                            login,
+                                            name,
+                                        }
+                                    }
+                                }
+                                ... on ProjectV2ItemFieldTextValue {
+                                    field {
+                                        ... on ProjectV2FieldCommon {
+                                            name,
+                                        }
+                                    },
+                                    text,
+                                }
+                                ... on ProjectV2ItemFieldSingleSelectValue {
+                                    field {
+                                        ... on ProjectV2FieldCommon {
+                                            name,
+                                        }
+                                    },
+                                    name,
+                                }
+                                ... on ProjectV2ItemFieldIterationValue {
+                                    field {
+                                        ... on ProjectV2FieldCommon {
+                                            name,
+                                        }
+                                    },
+                                    title,
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

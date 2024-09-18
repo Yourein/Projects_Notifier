@@ -1,0 +1,6 @@
+# Get current user id
+query Authenticate {
+    viewer {
+        login,
+    }
+}
