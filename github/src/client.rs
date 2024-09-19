@@ -5,7 +5,10 @@ use reqwest::header::{self, HeaderMap, HeaderValue};
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
-use crate::query::{authenticate, Authenticate};
+use crate::query::{
+    authenticate, Authenticate,
+    user_organizations, UserOrganizations,
+};
 
 const GRAPHQL_ENDPOINT: &'static str = "https://api.github.com/graphql";
 pub struct Client {
@@ -75,5 +78,10 @@ impl Client {
     pub fn get_user_login(&self) -> anyhow::Result<authenticate::ResponseData> {
         let variables = authenticate::Variables {};
         self.post_query::<Authenticate, authenticate::ResponseData>(variables)
+    }
+
+    pub fn get_user_organizations(&self) -> anyhow::Result<user_organizations::ResponseData> {
+        let variables = user_organizations::Variables {};
+        self.post_query::<UserOrganizations, user_organizations::ResponseData>(variables)
     }
 }
