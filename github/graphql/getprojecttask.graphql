@@ -1,5 +1,5 @@
 # Get tasks on the board
-query(
+query GetProjectTasks(
     $org_login: String!,
     $project_serial: Int!,
     $task_cursor_after: String,
