@@ -1,0 +1,19 @@
+query GetOrganizationProjects(
+    $org_login: String!
+) {
+    viewer {
+        organization(
+            login: $org_login
+        ) {
+            projectsV2(
+                first: 50
+            ) {
+                nodes {
+                    title,
+                    number,
+                    id,
+                }
+            }
+        }
+    }
+}

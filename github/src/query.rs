@@ -19,3 +19,12 @@ pub struct Authenticate;
     response_derives = "Debug",
 )]
 pub struct UserOrganizations;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "../schema.json",
+    query_path = "graphql/get_organization_projects.graphql",
+    variables_derives = "Debug",
+    response_derives = "Debug",
+)]
+pub struct GetOrganizationProjects;

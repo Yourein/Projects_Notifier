@@ -8,6 +8,7 @@ use std::fmt::Debug;
 use crate::query::{
     authenticate, Authenticate,
     user_organizations, UserOrganizations,
+    get_organization_projects, GetOrganizationProjects,
 };
 
 const GRAPHQL_ENDPOINT: &'static str = "https://api.github.com/graphql";
@@ -83,5 +84,15 @@ impl Client {
     pub fn get_user_organizations(&self) -> anyhow::Result<user_organizations::ResponseData> {
         let variables = user_organizations::Variables {};
         self.post_query::<UserOrganizations, user_organizations::ResponseData>(variables)
+    }
+
+    pub fn get_organization_projects(
+        &self,
+        organization_login: &str,
+    ) -> anyhow::Result<get_organization_projects::ResponseData> {
+        let variables = get_organization_projects::Variables {
+            org_login: organization_login.to_string(),
+        };
+        self.post_query::<GetOrganizationProjects, get_organization_projects::ResponseData>(variables)
     }
 }
