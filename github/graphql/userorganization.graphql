@@ -1,19 +1,13 @@
-# Fetch first 10 projects on an organization
-query(
-    $org_login: String
-) {
+# Fetch first 10 organization that the user is an admin.
+query{
     viewer {
-        organization(
-            login: $org_login
+        organizations(
+            first: 10
         ) {
-            projectsV2(
-                first: 10
-            ) {
-                nodes {
-                    title,
-                    id,
-                    number,
-                }
+            nodes {
+                name,
+                id,
+                login,
             }
         }
     }
