@@ -1,5 +1,5 @@
 # Fetch first 10 organization that the user is an admin.
-query{
+query UserOrganizations{
     viewer {
         organizations(
             first: 10

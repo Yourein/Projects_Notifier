@@ -10,3 +10,12 @@ use graphql_client::GraphQLQuery;
     )
 ]
 pub struct Authenticate;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "../schema.json",
+    query_path = "graphql/userorganizations.graphql",
+    variables_derives = "Debug",
+    response_derives = "Debug",
+)]
+pub struct UserOrganizations;
