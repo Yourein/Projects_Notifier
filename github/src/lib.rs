@@ -1,2 +1,3 @@
 pub mod client;
-mod query;
+pub(crate) mod query;
+pub(crate) mod scaler;
