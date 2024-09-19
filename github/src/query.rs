@@ -1,4 +1,7 @@
 use graphql_client::GraphQLQuery;
+use crate::scaler::DateTime;
+
+pub type ProjectV2Task = get_project_tasks::GetProjectTasksOrganizationProjectV2ItemsNodes;
 
 #[derive(GraphQLQuery)]
 #[
@@ -28,3 +31,12 @@ pub struct UserOrganizations;
     response_derives = "Debug",
 )]
 pub struct GetOrganizationProjects;
+
+#[derive(GraphQLQuery)]
+#[graphql(
+    schema_path = "../schema.json",
+    query_path = "graphql/getprojecttask.graphql",
+    variables_derives = "Debug",
+    response_derives = "Debug, Clone",
+)]
+pub struct GetProjectTasks;

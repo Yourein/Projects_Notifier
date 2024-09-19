@@ -6,9 +6,11 @@ use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
 use crate::query::{
+    ProjectV2Task,
     authenticate, Authenticate,
     user_organizations, UserOrganizations,
     get_organization_projects, GetOrganizationProjects,
+    get_project_tasks, GetProjectTasks,
 };
 
 const GRAPHQL_ENDPOINT: &'static str = "https://api.github.com/graphql";
@@ -94,5 +96,40 @@ impl Client {
             org_login: organization_login.to_string(),
         };
         self.post_query::<GetOrganizationProjects, get_organization_projects::ResponseData>(variables)
+    }
+
+    pub fn get_project_tasks(
+        &self,
+        organization_login: &str,
+        project_serial: i64,
+    ) -> anyhow::Result<Vec<ProjectV2Task>> {
+        let mut tasks: Vec<ProjectV2Task> = vec!();
+        let mut next_paging_key: Option<String> = None;
+
+        loop {
+            let variables = get_project_tasks::Variables {
+                org_login: organization_login.to_string(),
+                project_serial: project_serial,
+                task_cursor_after: next_paging_key.clone(),
+            };
+
+            let res: get_project_tasks::ResponseData = self.post_query::<GetProjectTasks, get_project_tasks::ResponseData>(variables).unwrap();
+            
+            let project = res
+                .organization.unwrap()
+                .project_v2.unwrap();
+
+            next_paging_key = project.items.page_info.end_cursor;
+            
+            if let Some(fetched_tasks) = project.items.nodes {
+                tasks.extend(fetched_tasks.into_iter().flatten());
+            }
+
+            if !project.items.page_info.has_next_page {
+                break;
+            }
+        }
+
+        Ok(tasks)
     }
 }
