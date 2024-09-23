@@ -5,5 +5,6 @@ edition = "2021"
 
 [dependencies]
 github = { path = "../github" }
+slack = { path = "../slack" }
 anyhow.workspace = true
 redis.workspace = true
