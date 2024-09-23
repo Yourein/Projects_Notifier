@@ -23,12 +23,12 @@ fn main() {
 
     loop {
         let current_minute = Local::now().time().minute();
-        println!{"Current_minute: {}", current_minute};
+        println!{"Main: Current_minute: {}", current_minute};
         if current_minute % 5 == 0 {
-            println!{"Trying to fetch Tasks..."};
+            println!{"Main: Trying to fetch Tasks..."};
             let tasks_result = gc.get_project_tasks("mayoi-design", 1, None);
             if tasks_result.is_err() {
-                println!{"Fetch error!"};
+                println!{"Main: Fetch error!"};
                 continue;
             }
             
