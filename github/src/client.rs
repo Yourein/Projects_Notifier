@@ -5,13 +5,17 @@ use reqwest::header::{self, HeaderMap, HeaderValue};
 use serde::de::DeserializeOwned;
 use std::fmt::Debug;
 
-use crate::query::{
+use crate::{model::ProjectTask, query::{
+    authenticate,
+    get_organization_projects,
+    get_project_tasks,
+    user_organizations,
+    Authenticate,
+    GetOrganizationProjects,
+    GetProjectTasks,
     ProjectV2Task,
-    authenticate, Authenticate,
-    user_organizations, UserOrganizations,
-    get_organization_projects, GetOrganizationProjects,
-    get_project_tasks, GetProjectTasks,
-};
+    UserOrganizations
+}};
 
 const GRAPHQL_ENDPOINT: &'static str = "https://api.github.com/graphql";
 pub struct Client {
@@ -102,9 +106,10 @@ impl Client {
         &self,
         organization_login: &str,
         project_serial: i64,
-    ) -> anyhow::Result<Vec<ProjectV2Task>> {
+        initial_paging_key: Option<String>,
+    ) -> anyhow::Result<Vec<ProjectTask>> {
         let mut tasks: Vec<ProjectV2Task> = vec!();
-        let mut next_paging_key: Option<String> = None;
+        let mut next_paging_key: Option<String> = initial_paging_key;
 
         loop {
             let variables = get_project_tasks::Variables {
@@ -130,6 +135,10 @@ impl Client {
             }
         }
 
-        Ok(tasks)
+        let res = tasks.into_iter()
+            .map(|it| it.try_into().unwrap())
+            .collect::<Vec<ProjectTask>>();
+
+        Ok(res)
     }
 }
