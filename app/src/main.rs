@@ -15,7 +15,7 @@ fn main() {
 
     let slack_end_point = env::var("MAIGO_SLACK_URL").unwrap();
     let github_token = env::var("MAIGO_GITHUB_TOKEN").unwrap();
-    let mut redis_client = RedisWrapper::new("redis://127.0.0.1").unwrap();
+    let mut redis_client = RedisWrapper::new("redis://redis").unwrap();
     let slack = Webhook::new(slack_end_point);
     let gc = Client::new(&github_token);
 

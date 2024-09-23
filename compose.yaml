@@ -8,10 +8,17 @@ services:
     environment:
       - MAIGO_GITHUB_TOKEN
       - MAIGO_SLACK_URL
+    networks:
+      - app-net
   redis_server:
     container_name: redis
     image: redis:latest
     volumes:
       - redis_data:/data
+    networks:
+      - app-net
 volumes:
   redis_data:
+networks:
+  app-net:
+    driver: bridge
