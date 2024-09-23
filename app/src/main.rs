@@ -77,6 +77,7 @@ fn initialize(
     redis: &mut RedisWrapper,
     gc: &Client
 ) {
+    println!{"Initialize: Start"};
     let get_result = gc.get_project_tasks("mayoi-design", 1, None);
     
     if get_result.is_err() {
@@ -101,6 +102,7 @@ fn initialize(
     for it in redis_task {
         let _ = redis.put_task(it.task_id, it.task_title);
     }
+    println!{"Initialize: End"};
 }
 
 fn post_task_to_slack<'a>(client: &Webhook, post: Post<'a>) {
