@@ -20,6 +20,11 @@ query GetProjectTasks(
                 },
                 nodes {
                     createdAt,
+                    creator {
+                        __typename,
+                        login
+                    },
+                    id,
                     fieldValues(
                         first: 10,
                     ) {
