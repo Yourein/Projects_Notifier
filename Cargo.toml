@@ -14,3 +14,4 @@ serde_json = "1.0.128"
 # chrono = { verison = "0.4.38", default-features = true, features = ["serde"] }
 chrono = { version = "0.4.38", default-features = true, features = ["serde"] }
 anyhow = "1.0.89"
+redis = "0.27.2"

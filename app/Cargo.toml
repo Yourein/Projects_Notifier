@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 github = { path = "../github" }
 anyhow.workspace = true
+redis.workspace = true
