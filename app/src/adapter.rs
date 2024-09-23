@@ -40,7 +40,8 @@ pub(crate) fn create_post_from_task<'a>(task: ProjectTask) -> Post<'a> {
             .into_iter()
             .map(|it| {
                 if it.profile_name.is_some() {
-                    it.profile_name.clone().unwrap()
+                    let profile_name = it.profile_name.clone().unwrap();
+                    format!{"{} ({})", profile_name, it.user_id}
                 } else {
                     it.user_id
                 }
