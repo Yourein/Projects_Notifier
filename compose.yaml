@@ -1,0 +1,17 @@
+services:
+  rust:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: projects-notifier-image
+    container_name: projects-notifier-container
+    environment:
+      - MAIGO_GITHUB_TOKEN
+      - MAIGO_SLACK_URL
+  redis_server:
+    container_name: redis
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+volumes:
+  redis_data:
