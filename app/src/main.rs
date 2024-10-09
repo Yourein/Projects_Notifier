@@ -117,3 +117,17 @@ fn post_task_to_slack<'a>(client: &Webhook, post: Post<'a>) {
         }
     }
 }
+
+fn post_txt_to_channel(client: &Webhook, txt: &str) {
+    let mut post = Post::new();
+    post.add_text_block(txt);
+
+    match client.post(post) {
+        Ok(_) => {
+            println!{"Main: The txt ({}) successfully posted to the channel", txt}
+        }
+        Err(_) => {
+            println!{"Main: Posting txt to the channel failed"}
+        }
+    }
+}
