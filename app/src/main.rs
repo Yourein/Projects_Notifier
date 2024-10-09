@@ -23,6 +23,11 @@ fn main() {
 
     initialize(&mut redis_client, &gc);
 
+    post_txt_to_channel(
+        &slack,
+        "Projects Notifier is successfully booted!"
+    );
+
     loop {
         let current_minute = Local::now().time().minute();
         println!{"Main: Current_minute: {}", current_minute};
@@ -31,6 +36,10 @@ fn main() {
             let tasks_result = gc.get_project_tasks("mayoi-design", 1, None);
             if tasks_result.is_err() {
                 println!{"Main: Fetch error!"};
+                post_txt_to_channel(
+                    &slack,
+                    "Failed to fetch tasks!"
+                );
                 continue;
             }
             
