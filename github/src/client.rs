@@ -118,9 +118,16 @@ impl Client {
                 task_cursor_after: next_paging_key.clone(),
             };
 
-            let res: get_project_tasks::ResponseData = self.post_query::<GetProjectTasks, get_project_tasks::ResponseData>(variables).unwrap();
+            let res: anyhow::Result<get_project_tasks::ResponseData> = self.post_query::<GetProjectTasks, get_project_tasks::ResponseData>(variables);
+
+            if res.is_err() {
+                return Err(
+                    anyhow!{"Failed to get the project tasks"}
+                )
+            }
             
             let project = res
+                .unwrap()
                 .organization.unwrap()
                 .project_v2.unwrap();
 
