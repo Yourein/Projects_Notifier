@@ -48,23 +48,61 @@ fn main() {
                 .into_iter()
                 .filter_map(|it| {
                     let shrink = ProjectTaskShrink::try_from(it.clone()).unwrap();
+                    println!{
+                        "Main: Looking up the task {}({}) from cache...",
+                        it.task_title,
+                        it.task_id,
+                    };
                     let chache = redis_client.get_task(shrink.task_id.clone());
                     if chache.is_err() {
                         println!{"Failed to fetch chache from Redis!: id={}, title={}", shrink.task_id, shrink.task_title};
                         return None;
                     }
+
+                    println!{"Main: Task {}({}) found in cache!", it.task_title, it.task_id};
                     
                     match chache.unwrap() {
                         Some(chached_title) => {
                             if it.task_title != chached_title {
+                                println!{
+                                    "Main: Chach found for Task {}({}) but the Title is not same. Updated title is {}",
+                                    it.task_title,
+                                    it.task_id,
+                                    chached_title
+                                };
                                 Some(it)
                             } else {
                                 None
                             }
                         }
                         None => {
-                            let _ = redis_client.put_task(shrink.task_id, shrink.task_title);
-                            Some(it)
+                            println!{
+                                "Main: Task {}({}) not found in chach. Putting it to redis...",
+                                it.task_title,
+                                it.task_id
+                            };
+                            let put_result = redis_client.put_task(shrink.task_id, shrink.task_title);
+
+                            match put_result {
+                                Ok(_) => {
+                                    println!{
+                                        "Main: Task resistered successfully (*^ーﾟ)b"
+                                    };
+                                    Some(it)
+                                }
+                                Err(_) => {
+                                    println!{
+                                        "Main: Put the task {}({}) for redis failed!",
+                                        it.task_title,
+                                        it.task_id
+                                    }
+                                     post_txt_to_channel(
+                                        &slack,
+                                        "Warning! Putting new task to redis failed! This can be an unrecoverable error!\nPlace: Main -> Fetch Task -> New Task -> Resister New Task To Cache"
+                                    );
+                                    None
+                                }
+                            }
                         }
                     }
                 })
