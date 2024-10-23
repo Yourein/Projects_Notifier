@@ -49,7 +49,7 @@ fn main() {
                 .filter_map(|it| {
                     let shrink = ProjectTaskShrink::try_from(it.clone()).unwrap();
                     println!{
-                        "Main: Looking up the task {}({}) from cache...",
+                        "Main: Looking up the task {}({}) from chache...",
                         it.task_title,
                         it.task_id,
                     };
@@ -59,7 +59,7 @@ fn main() {
                         return None;
                     }
 
-                    println!{"Main: Task {}({}) found in cache!", it.task_title, it.task_id};
+                    println!{"Main: Task {}({}) found in chache!", it.task_title, it.task_id};
                     
                     match chache.unwrap() {
                         Some(chached_title) => {
@@ -98,7 +98,7 @@ fn main() {
                                     }
                                      post_txt_to_channel(
                                         &slack,
-                                        "Warning! Putting new task to redis failed! This can be an unrecoverable error!\nPlace: Main -> Fetch Task -> New Task -> Resister New Task To Cache"
+                                        "Warning! Putting new task to redis failed! This can be an unrecoverable error!\nPlace: Main -> Fetch Task -> New Task -> Resister New Task To Chache"
                                     );
                                     None
                                 }
