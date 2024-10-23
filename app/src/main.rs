@@ -70,7 +70,11 @@ fn main() {
                                     it.task_id,
                                     chached_title
                                 };
-                                Some(it)
+
+                                match resister_chache(&mut redis_client, &slack, shrink.task_id, shrink.task_title) {
+                                    Ok(()) => Some(it),
+                                    Err(()) => None
+                                }
                             } else {
                                 None
                             }
@@ -81,27 +85,10 @@ fn main() {
                                 it.task_title,
                                 it.task_id
                             };
-                            let put_result = redis_client.put_task(shrink.task_id, shrink.task_title);
-
-                            match put_result {
-                                Ok(_) => {
-                                    println!{
-                                        "Main: Task resistered successfully (*^ーﾟ)b"
-                                    };
-                                    Some(it)
-                                }
-                                Err(_) => {
-                                    println!{
-                                        "Main: Put the task {}({}) for redis failed!",
-                                        it.task_title,
-                                        it.task_id
-                                    }
-                                     post_txt_to_channel(
-                                        &slack,
-                                        "Warning! Putting new task to redis failed! This can be an unrecoverable error!\nPlace: Main -> Fetch Task -> New Task -> Resister New Task To Chache"
-                                    );
-                                    None
-                                }
+                            
+                            match resister_chache(&mut redis_client, &slack, shrink.task_id, shrink.task_title) {
+                                Ok(()) => Some(it),
+                                Err(()) => None
                             }
                         }
                     }
@@ -152,6 +139,36 @@ fn initialize(
         let _ = redis.put_task(it.task_id, it.task_title);
     }
     println!{"Initialize: End"};
+}
+
+fn resister_chache(
+    redis_client: &mut RedisWrapper,
+    slack: &Webhook,
+    id: String,
+    task_title: String
+) -> Result<(), ()> {
+    let put_result = redis_client.put_task(id.clone(), task_title.clone());
+
+    match put_result {
+        Ok(_) => {
+            println!{
+                "Main: Task resistered successfully (*^ーﾟ)b"
+            };
+            Ok(())
+        }
+        Err(_) => {
+            println!{
+                "Main: Put the task {}({}) for redis failed!",
+                task_title,
+                id,
+            }
+            post_txt_to_channel(
+                &slack,
+                "Warning! Putting new task to redis failed! This can be an unrecoverable error!\nPlace: Main -> Fetch Task -> New Task -> Resister New Task To Chache"
+            );
+            Err(())
+        }
+    }
 }
 
 fn post_task_to_slack<'a>(client: &Webhook, post: Post<'a>) {
